@@ -1,75 +1,11 @@
-from kivy.app import App
-from kivy.base import Builder
-from kivy.properties import ListProperty, ObjectProperty
-
-from kivy.uix.scrollview import ScrollView
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.gridlayout import GridLayout
+from kivy.properties import ListProperty
+from kivy.uix.scrollview import ScrollView
 from kivy.uix.textinput import TextInput
-from kivy.uix.button import Button
-
-Builder.load_string("""
-<EditableCell>:
-    multiline: True
-
-<TableRowView>:
-    width: 1000
-    orientation: 'horizontal'
-
-<TableView>:
-    id: table
-    width: 1000
-    height: 1000
-    orientation: 'vertical'
-    size_hint_x: None
-    size_hint_y: None
-    
-
-
-<TableEditor>:
-    orientation: 'vertical'
-
-
-<TableEditorTopPanel>:
-    InsertRowButton:
-        text: 'add row'
-    
-    InsertColButton:
-        text: 'add col'
-    
-""")
 
 
 class EditableCell(TextInput):
     pass
-
-
-class InsertButton(Button):
-    pass
-
-
-class InsertRowButton(InsertButton):
-    def on_press(self):
-        TableView().insert_empty_row()
-
-
-class InsertColButton(InsertButton):
-    def on_press(self):
-        TableView().insert_empty_col()
-
-
-class TableEditorTopPanel(BoxLayout):
-    pass
-
-
-class TableEditor(BoxLayout):
-    def __init__(self, **kwargs):
-        super(TableEditor, self).__init__(**kwargs)
-        box_layout = TableEditorTopPanel(width=200, height=50, size_hint_x=None, size_hint_y=None)
-        table_scroll_view = TableScrollView()
-
-        self.add_widget(box_layout)
-        self.add_widget(table_scroll_view)
 
 
 class TableRowView(BoxLayout):
@@ -89,17 +25,17 @@ class TableRowView(BoxLayout):
         return [cell.text for cell in self.children]
 
 
-class TableView(BoxLayout):
+class TableViewSingleton(BoxLayout):
     table_data = ListProperty()
     __instance = None
 
     def __new__(cls, *args, **kwargs):
-        if TableView.__instance is None:
-            TableView.__instance = super(TableView, cls).__new__(cls, *args, **kwargs)
-        return TableView.__instance
+        if TableViewSingleton.__instance is None:
+            TableViewSingleton.__instance = super(TableViewSingleton, cls).__new__(cls, *args, **kwargs)
+        return TableViewSingleton.__instance
 
     def __init__(self, **kwargs):
-        super(TableView, self).__init__(**kwargs)
+        super(TableViewSingleton, self).__init__(**kwargs)
         self.bind(minimum_width=self.setter('width'))
         self.bind(minimum_width=self.setter('height'))
 
@@ -142,13 +78,8 @@ class TableScrollView(ScrollView):
     def __init__(self, **kwargs):
         super(TableScrollView, self).__init__(**kwargs)
         data = mock_data()
-        table_layout = TableView(table_data=data)
+        table_layout = TableViewSingleton(table_data=data)
         self.add_widget(table_layout)
-
-
-class TableEditorApp(App):
-    def build(self):
-        return TableEditor()
 
 
 def mock_data():
@@ -160,7 +91,3 @@ def mock_data():
         ['some text' * 2, ] * 6,
     ]
     return data
-
-
-if __name__ == '__main__':
-    TableEditorApp().run()
