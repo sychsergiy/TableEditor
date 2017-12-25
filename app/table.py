@@ -1,7 +1,16 @@
 from kivy.uix.boxlayout import BoxLayout
-from kivy.properties import ListProperty
+from kivy.properties import ListProperty, NumericProperty
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.textinput import TextInput
+from kivy.uix.button import Button
+
+
+class ColHeader(Button):
+    pass
+
+
+class RowHeader(Button):
+    pass
 
 
 class EditableCell(TextInput):
@@ -10,10 +19,12 @@ class EditableCell(TextInput):
 
 class TableRowView(BoxLayout):
     row_data = ListProperty()
+    index = NumericProperty()
 
     def __init__(self, **kwargs):
         super(TableRowView, self).__init__(**kwargs)
-
+        header_cell = RowHeader(text=str(self.index + 1), size_hint_x=None, width=40)
+        self.add_widget(header_cell)
         for value in self.row_data:
             self.insert_cell(value)
 
@@ -30,9 +41,9 @@ class TableViewSingleton(BoxLayout):
     __instance = None
 
     def __new__(cls, *args, **kwargs):
-        if TableViewSingleton.__instance is None:
-            TableViewSingleton.__instance = super(TableViewSingleton, cls).__new__(cls, *args, **kwargs)
-        return TableViewSingleton.__instance
+        if cls.__instance is None:
+            cls.__instance = super().__new__(cls, *args, **kwargs)
+        return cls.__instance
 
     def __init__(self, **kwargs):
         super(TableViewSingleton, self).__init__(**kwargs)
@@ -45,11 +56,25 @@ class TableViewSingleton(BoxLayout):
 
     def redraw(self):
         self.clear_widgets()
-        for row_value in self.table_data:
-            self.insert_row(row_value)
+        self.add_header_row()
 
-    def insert_row(self, row_data):
-        table_row = TableRowView(row_data=row_data)
+        for index, row_value in enumerate(self.table_data):
+            self.insert_row(row_value, index)
+
+    def add_header_row(self):
+        header_row = BoxLayout(orientation='horizontal', height=40, size_hint_y=None, )
+
+        # todo: fix get_table_data method
+        cols_n = self.get_cols_n()
+        header_row.add_widget(RowHeader(size=(40, 40), size_hint_y=None, size_hint_x=None))
+        # square 40*40 for align header row
+
+        for i in range(1, cols_n + 1):
+            header_row.add_widget(ColHeader(text='{}'.format(i)))
+        self.add_widget(header_row)
+
+    def insert_row(self, row_data, index):
+        table_row = TableRowView(row_data=row_data, index=index)
         self.add_widget(table_row)
 
     def get_table_data(self):
@@ -64,6 +89,12 @@ class TableViewSingleton(BoxLayout):
         for row in self.table_data:
             row.append('')
         self.redraw()
+
+    def get_cols_n(self):
+        return len(self.table_data[0])
+
+    def get_rows_n(self):
+        return len(self.table_data)
 
     @staticmethod
     def normalize_data(data):

@@ -9,6 +9,12 @@ Builder.load_string("""
 <EditableCell>:
     multiline: True
 
+<ColHeader>:
+    bold: True
+
+<RowHeader>:
+    background_down: self.background_normal
+
 <TableRowView>:
     width: 1000
     orientation: 'horizontal'
