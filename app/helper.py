@@ -25,8 +25,6 @@ class MatrixHelper(object):
     def get_rows_n(self):
         return len(self.data)
 
-    def sort_by_column(self, index):
-        sorted_column = sorted([row[index] for row in self.data], reverse=False)
-        for i, row in enumerate(self.data):
-            row[index] = sorted_column[i]
+    def sort_by_column(self, index, reverse=False):
+        self.data.sort(key=lambda x: x[index], reverse=reverse)
 

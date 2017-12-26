@@ -44,6 +44,6 @@ class TableContentView(GridLayout):
                                     data_helper=self.data_helper)
                 self.add_widget(cell)
 
-    def sort_by_column(self, index):
-        self.data_helper.sort_by_column(index)
+    def sort_by_column(self, index, reverse=False):
+        self.data_helper.sort_by_column(index, reverse=reverse)
         self.redraw()

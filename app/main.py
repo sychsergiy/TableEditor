@@ -14,9 +14,9 @@ class TableEditorApp(App):
 
 def mock_data():
     data = [
-        ['123some text' * 2, ] * 5,
-        ['text' * 3, ] * 3,
-        ['some text' * 2, ] * 4,
+        ['123some text' * 2, ] * 5 + ['1', '2'],
+        ['text' * 3,] * 3,
+        ['some text' * 2, ] * 4 + ['3', '4'],
         ['some text' * 2, ] * 6,
         ['some text' * 2, ] * 6,
     ]

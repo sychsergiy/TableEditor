@@ -2,7 +2,7 @@ from kivy.base import Builder
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.togglebutton import ToggleButton
 from kivy.uix.button import Button
-from kivy.properties import NumericProperty, ObjectProperty
+from kivy.properties import NumericProperty, ObjectProperty, BooleanProperty
 
 Builder.load_string("""
 <ToggleModeButton>:
@@ -18,21 +18,40 @@ Builder.load_string("""
 """)
 
 
-# todo: on_press LeftHeaderButton sort with asc and desc
-
 class ToggleModeButton(ToggleButton):
     pass
 
 
 class TopHeaderButton(Button):
     index = NumericProperty()
+    selected = BooleanProperty(False)
+    selected_twice = BooleanProperty(False)
 
     def on_press(self):
-        table = self.get_content_view()
-        table.sort_by_column(self.index)
+        table = self.parent.table
 
-    def get_content_view(self):
-        return self.parent.table
+        if self.selected_twice:
+            self.deselect()
+        elif self.selected:
+            self.second_select()
+            table.sort_by_column(self.index)
+        else:
+            self.select()
+            table.sort_by_column(self.index, reverse=True)
+
+    def second_select(self):
+        self.selected = False
+        self.selected_twice = True
+
+    def select(self):
+        self.parent.set_selected_cell(self)
+        self.selected = True
+        self.background_color = [.25, .25, .6, 1.0]
+
+    def deselect(self):
+        self.selected_twice = False
+        self.selected = False
+        self.background_color = [1, 1, 1, 1]
 
 
 class LeftHeaderButton(Button):
@@ -41,7 +60,8 @@ class LeftHeaderButton(Button):
 
 class TopHeaderView(BoxLayout):
     length = NumericProperty()
-    table = ObjectProperty()
+    table = ObjectProperty(None)
+    selected_cell = ObjectProperty(None, allownone=True)
 
     def __init__(self, **kwargs):
         super(TopHeaderView, self).__init__(**kwargs)
@@ -49,6 +69,11 @@ class TopHeaderView(BoxLayout):
         for i in range(self.length):
             cell = TopHeaderButton(text=str(i + 1), index=i)
             self.add_widget(cell)
+
+    def set_selected_cell(self, cell):
+        if self.selected_cell and self.selected_cell is not cell:
+            self.selected_cell.deselect()
+        self.selected_cell = cell
 
 
 class LeftHeaderView(BoxLayout):
