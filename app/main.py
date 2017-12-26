@@ -1,10 +1,26 @@
 from kivy.app import App
 from kivy.uix.label import Label
 
+from table.table_scroll_view import TableScrollView
+from helper import MatrixHelper
+
 
 class TableEditorApp(App):
     def build(self):
-        return Label(text='Hello world')
+        data = mock_data()
+        data_helper = MatrixHelper(data)
+        return TableScrollView(data_helper=data_helper)
+
+
+def mock_data():
+    data = [
+        ['123some text' * 2, ] * 5,
+        ['text' * 3, ] * 3,
+        ['some text' * 2, ] * 4,
+        ['some text' * 2, ] * 6,
+        ['some text' * 2, ] * 6,
+    ]
+    return data
 
 
 if __name__ == '__main__':
