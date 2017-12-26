@@ -28,6 +28,7 @@ class TopHeaderCell(SelectableButton):
             # and send it to table with set_selected method
             self.select()
             table.set_selected_col(self)
+            table.sort_column_by_ascending(int(self.text) - 1)
         else:
             # deselect this button if it is already pressed
             # and send None to table with set_selected_col method
@@ -85,8 +86,10 @@ class TableRowView(BoxLayout):
 class TableViewSingleton(BoxLayout):
     table_data = ListProperty()
 
-    selected_col = ObjectProperty(None, allownone=True)
-    selected_row = ObjectProperty(None, allownone=True)
+    selected_col_index = NumericProperty()
+    selected_row_index = NumericProperty()
+
+    header_row = ObjectProperty()
 
     painted = BooleanProperty(False)
 
@@ -106,18 +109,23 @@ class TableViewSingleton(BoxLayout):
 
         # not redraw table when creating new singleton instance
         if not self.painted:
+            # save selected row and col
+
+
             self.redraw()
             self.painted = True
 
     def redraw(self):
         self.clear_widgets()
-        self.add_header_row()
+
+        self.header_row = self.create_header_row()
+        self.add_widget(self.header_row)
 
         for index, row_value in enumerate(self.table_data):
             self.insert_row(row_value, index)
 
-    def add_header_row(self):
-        self.add_widget(HeaderTableRowView(cols_n=self.get_cols_n(), height=HEADER_ROW_HEIGHT))
+    def create_header_row(self):
+        return HeaderTableRowView(cols_n=self.get_cols_n(), height=HEADER_ROW_HEIGHT)
 
     def insert_row(self, row_data, index):
         table_row = TableRowView(row_data=row_data, row_index=index)
@@ -142,15 +150,22 @@ class TableViewSingleton(BoxLayout):
     def get_rows_n(self):
         return len(self.table_data)
 
-    def set_selected_col(self, header_cell):
-        if self.selected_col:
-            self.selected_col.deselect()  # set off selected col
-        self.selected_col = header_cell
+    # def set_selected_col_index(self, index):
+    #     if self.selected_col:
+    #         self.selected_col.deselect()  # set off selected col
+    #     self.selected_col = header_cell
 
-    def set_selected_row(self, header_cell):
-        if self.selected_row:
-            self.selected_row.deselect()  # set off selected col
-        self.selected_row = header_cell
+    # def set_selected_row_index(self, index):
+    #     if self.selected_row:
+    #         self.selected_row.deselect()  # set off selected row
+    #     self.selected_row = header_cell
+
+    def sort_column_by_ascending(self, index):
+        sorted_column = sorted([row[index] for row in self.table_data])
+        for row in self.table_data:
+            row[index] = sorted_column[index]
+
+        self.redraw()
 
     @staticmethod
     def normalize_data(data):
@@ -171,8 +186,8 @@ class TableScrollView(ScrollView):
 
 def mock_data():
     data = [
-        ['some text' * 2, ] * 5,
-        ['some text' * 3, ] * 3,
+        ['123some text' * 2, ] * 5,
+        ['text' * 3, ] * 3,
         ['some text' * 2, ] * 4,
         ['some text' * 2, ] * 6,
         ['some text' * 2, ] * 6,
