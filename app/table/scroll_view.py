@@ -8,7 +8,7 @@ from settings import CELL_SIZE, HEADER_SIZE
 
 from .content_view import TableContentView
 
-from .header import ToggleModeButton, TopHeader, LeftHeader
+from .header import ToggleModeButton, TopHeaderView, LeftHeaderView
 
 Builder.load_string("""
 <TableView>:
@@ -39,7 +39,7 @@ class TableScrollView(ScrollView):
 class TableView(GridLayout):
     """
     4*4 view which include:
-        1) align button (redact, not_redact)
+        1) toggle mode button (write, read)
         2) top header
         3) left header
         4) table content
@@ -48,16 +48,20 @@ class TableView(GridLayout):
 
     def __init__(self, **kwargs):
         super(TableView, self).__init__(**kwargs)
+        cols_n = self.data_helper.get_cols_n()
+        rows_n = self.data_helper.get_rows_n()
         options = {
             'data_helper': self.data_helper,
-            'cols': self.data_helper.get_cols_n(),
-            'rows': self.data_helper.get_rows_n(),
+            'cols': cols_n,
+            'rows': rows_n,
         }
+        # todo: add sort method in table_content
+        # todo: send table_content to headers
         table_content = TableContentView(**options)
-        self.add_widget(ToggleModeButton())
+        self.add_widget(ToggleModeButton(size=(HEADER_SIZE, HEADER_SIZE)))
 
-        self.add_widget(TopHeader())
+        self.add_widget(TopHeaderView(length=cols_n, height=HEADER_SIZE))
 
-        self.add_widget(LeftHeader())
+        self.add_widget(LeftHeaderView(length=rows_n, width=HEADER_SIZE))
 
         self.add_widget(table_content)
