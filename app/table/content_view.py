@@ -33,13 +33,17 @@ class TableContentView(GridLayout):
 
     def __init__(self, **kwargs):
         super(TableContentView, self).__init__(**kwargs)
-
         self.redraw()
 
     def redraw(self):
+        self.clear_widgets()
         data = self.data_helper.data
         for row_index, row_value in enumerate(data):
             for col_index, cell_value in enumerate(row_value):
                 cell = EditableCell(text=cell_value, row_index=row_index, col_index=col_index, size=CELL_SIZE,
                                     data_helper=self.data_helper)
                 self.add_widget(cell)
+
+    def sort_by_column(self, index):
+        self.data_helper.sort_by_column(index)
+        self.redraw()

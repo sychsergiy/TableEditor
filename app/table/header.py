@@ -2,8 +2,7 @@ from kivy.base import Builder
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.togglebutton import ToggleButton
 from kivy.uix.button import Button
-from kivy.properties import NumericProperty
-
+from kivy.properties import NumericProperty, ObjectProperty
 
 Builder.load_string("""
 <ToggleModeButton>:
@@ -19,12 +18,21 @@ Builder.load_string("""
 """)
 
 
+# todo: on_press LeftHeaderButton sort with asc and desc
+
 class ToggleModeButton(ToggleButton):
     pass
 
 
 class TopHeaderButton(Button):
     index = NumericProperty()
+
+    def on_press(self):
+        table = self.get_content_view()
+        table.sort_by_column(self.index)
+
+    def get_content_view(self):
+        return self.parent.table
 
 
 class LeftHeaderButton(Button):
@@ -33,6 +41,7 @@ class LeftHeaderButton(Button):
 
 class TopHeaderView(BoxLayout):
     length = NumericProperty()
+    table = ObjectProperty()
 
     def __init__(self, **kwargs):
         super(TopHeaderView, self).__init__(**kwargs)

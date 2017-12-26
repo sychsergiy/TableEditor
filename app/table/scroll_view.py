@@ -55,13 +55,12 @@ class TableView(GridLayout):
             'cols': cols_n,
             'rows': rows_n,
         }
-        # todo: add sort method in table_content
-        # todo: send table_content to headers
-        table_content = TableContentView(**options)
+        content_view = TableContentView(**options)
+
         self.add_widget(ToggleModeButton(size=(HEADER_SIZE, HEADER_SIZE)))
 
-        self.add_widget(TopHeaderView(length=cols_n, height=HEADER_SIZE))
+        self.add_widget(TopHeaderView(length=cols_n, height=HEADER_SIZE, table=content_view))
 
         self.add_widget(LeftHeaderView(length=rows_n, width=HEADER_SIZE))
 
-        self.add_widget(table_content)
+        self.add_widget(content_view)
