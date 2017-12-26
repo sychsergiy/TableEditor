@@ -15,8 +15,17 @@ Builder.load_string("""
 
 
 class EditableCell(TextInput):
+    data_helper = ObjectProperty()
     row_index = NumericProperty()
     col_index = NumericProperty()
+
+    def __init__(self, **kwargs):
+        super(EditableCell, self).__init__(**kwargs)
+
+        def on_text(instance, value):
+            instance.data_helper.update_cell(value, instance.row_index, instance.col_index)
+
+        self.bind(text=on_text)
 
 
 class TableContentView(GridLayout):
@@ -31,5 +40,6 @@ class TableContentView(GridLayout):
         data = self.data_helper.data
         for row_index, row_value in enumerate(data):
             for col_index, cell_value in enumerate(row_value):
-                cell = EditableCell(text=cell_value, index=row_index, col_index=col_index, size=CELL_SIZE)
+                cell = EditableCell(text=cell_value, row_index=row_index, col_index=col_index, size=CELL_SIZE,
+                                    data_helper=self.data_helper)
                 self.add_widget(cell)

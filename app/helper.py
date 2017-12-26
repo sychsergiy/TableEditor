@@ -16,8 +16,8 @@ class MatrixHelper(object):
     def insert_empty_cols(self, n, begin_index=None):
         pass
 
-    def update_cell(self, row_index, col_index):
-        pass
+    def update_cell(self, value, row_index, col_index):
+        self.data[row_index][col_index] = value
 
     def get_cols_n(self):
         return len(self.data[0])

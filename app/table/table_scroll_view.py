@@ -26,10 +26,10 @@ class TableScrollView(ScrollView):
 
     def __init__(self, **kwargs):
         super(TableScrollView, self).__init__(**kwargs)
-        table = TableView(data_helper=self.data_helper, size=self.get_table_size())
+        table = TableView(data_helper=self.data_helper, size=self.get_table_content_size())
         self.add_widget(table)
 
-    def get_table_size(self):
+    def get_table_content_size(self):
         cols_n = self.data_helper.get_cols_n()
         rows_n = self.data_helper.get_rows_n()
         return cols_n * CELL_SIZE[0], rows_n*CELL_SIZE[1]
@@ -47,15 +47,11 @@ class TableView(GridLayout):
 
     def __init__(self, **kwargs):
         super(TableView, self).__init__(**kwargs)
-        self.bind(minimum_width=self.setter('width'))
-        self.bind(minimum_width=self.setter('height'))
-
         options = {
             'data_helper': self.data_helper,
             'cols': self.data_helper.get_cols_n(),
             'rows': self.data_helper.get_rows_n(),
         }
-        # todo: add width and height computing
         table_content = TableContentView(**options)
         self.add_widget(table_content)
 
