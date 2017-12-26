@@ -1,5 +1,5 @@
 from kivy.uix.boxlayout import BoxLayout
-from kivy.properties import ListProperty, NumericProperty
+from kivy.properties import ListProperty, NumericProperty, ObjectProperty, BooleanProperty
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
@@ -7,25 +7,69 @@ from kivy.uix.button import Button
 from settings import HEADER_COL_WIDTH, HEADER_ROW_HEIGHT
 
 
-class RowHeaderCell(Button):
-    pass
+class SelectableButton(Button):
+    pressed = BooleanProperty(False)
+
+    def select(self):
+        self.background_color = [.25, .25, .6, 1.0]
+        self.pressed = True
+
+    def deselect(self):
+        self.background_color = [1, 1, 1, 1]
+        self.pressed = False
 
 
-class ColHeaderCell(Button):
-    pass
+class TopHeaderCell(SelectableButton):
+    def on_press(self):
+        # todo: not deselect after second click but sort
+        table = TableViewSingleton()
+        if not self.pressed:
+            # select this button if it is not pressed
+            # and send it to table with set_selected method
+            self.select()
+            table.set_selected_col(self)
+        else:
+            # deselect this button if it is already pressed
+            # and send None to table with set_selected_col method
+            self.deselect()
+            table.set_selected_col(None)
+
+
+class LeftHeaderCell(SelectableButton):
+    def on_press(self):
+        table = TableViewSingleton()
+        if not self.pressed:
+            self.select()
+            table.set_selected_row(self)
+        else:
+            self.deselect()
+            table.set_selected_row(None)
 
 
 class EditableCell(TextInput):
     pass
 
 
+class HeaderTableRowView(BoxLayout):
+    cols_n = NumericProperty()
+
+    def __init__(self, **kwargs):
+        super(HeaderTableRowView, self).__init__(**kwargs)
+
+        header_cell = LeftHeaderCell(size=(HEADER_COL_WIDTH, HEADER_ROW_HEIGHT), size_hint_y=None, size_hint_x=None)
+        self.add_widget(header_cell)  # square 40*40 for align header row
+
+        for i in range(1, self.cols_n + 1):
+            self.add_widget(TopHeaderCell(text='{}'.format(i)))
+
+
 class TableRowView(BoxLayout):
     row_data = ListProperty()
-    index = NumericProperty()
+    row_index = NumericProperty()
 
     def __init__(self, **kwargs):
         super(TableRowView, self).__init__(**kwargs)
-        header_cell = ColHeaderCell(text=str(self.index + 1), size_hint_x=None, width=HEADER_COL_WIDTH)
+        header_cell = LeftHeaderCell(text=str(self.row_index + 1), size_hint_x=None, width=HEADER_COL_WIDTH)
         self.add_widget(header_cell)
         for value in self.row_data:
             self.insert_cell(value)
@@ -40,6 +84,12 @@ class TableRowView(BoxLayout):
 
 class TableViewSingleton(BoxLayout):
     table_data = ListProperty()
+
+    selected_col = ObjectProperty(None, allownone=True)
+    selected_row = ObjectProperty(None, allownone=True)
+
+    painted = BooleanProperty(False)
+
     __instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -54,7 +104,10 @@ class TableViewSingleton(BoxLayout):
 
         self.table_data = self.normalize_data(self.table_data)
 
-        self.redraw()
+        # not redraw table when creating new singleton instance
+        if not self.painted:
+            self.redraw()
+            self.painted = True
 
     def redraw(self):
         self.clear_widgets()
@@ -64,18 +117,10 @@ class TableViewSingleton(BoxLayout):
             self.insert_row(row_value, index)
 
     def add_header_row(self):
-        header_row = BoxLayout(orientation='horizontal', height=HEADER_ROW_HEIGHT, size_hint_y=None, )
-
-        cols_n = self.get_cols_n()
-        header_cell = ColHeaderCell(size=(HEADER_COL_WIDTH, HEADER_ROW_HEIGHT), size_hint_y=None, size_hint_x=None)
-        header_row.add_widget(header_cell)  # square 40*40 for align header row
-
-        for i in range(1, cols_n + 1):
-            header_row.add_widget(RowHeaderCell(text='{}'.format(i)))
-        self.add_widget(header_row)
+        self.add_widget(HeaderTableRowView(cols_n=self.get_cols_n(), height=HEADER_ROW_HEIGHT))
 
     def insert_row(self, row_data, index):
-        table_row = TableRowView(row_data=row_data, index=index)
+        table_row = TableRowView(row_data=row_data, row_index=index)
         self.add_widget(table_row)
 
     def get_table_data(self):
@@ -96,6 +141,16 @@ class TableViewSingleton(BoxLayout):
 
     def get_rows_n(self):
         return len(self.table_data)
+
+    def set_selected_col(self, header_cell):
+        if self.selected_col:
+            self.selected_col.deselect()  # set off selected col
+        self.selected_col = header_cell
+
+    def set_selected_row(self, header_cell):
+        if self.selected_row:
+            self.selected_row.deselect()  # set off selected col
+        self.selected_row = header_cell
 
     @staticmethod
     def normalize_data(data):

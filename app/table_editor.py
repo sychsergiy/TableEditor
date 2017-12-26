@@ -39,7 +39,11 @@ Builder.load_string("""
     
     InsertColButton:
         text: 'add col'
-    
+
+<HeaderTableRowView>:
+    size_hint_y: None
+    orientation: 'horizontal'
+
 """)
 
 
