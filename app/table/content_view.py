@@ -1,9 +1,9 @@
 from kivy.base import Builder
 
 from kivy.uix.gridlayout import GridLayout
-from kivy.properties import ObjectProperty, NumericProperty
+from kivy.properties import ObjectProperty, NumericProperty, BooleanProperty
 from kivy.uix.textinput import TextInput
-
+from kivy.uix.label import Label
 from settings import CELL_SIZE
 
 Builder.load_string("""
@@ -30,6 +30,7 @@ class EditableCell(TextInput):
 
 class TableContentView(GridLayout):
     data_helper = ObjectProperty()
+    read_only_mode = BooleanProperty(False)
 
     def __init__(self, **kwargs):
         super(TableContentView, self).__init__(**kwargs)
@@ -37,13 +38,19 @@ class TableContentView(GridLayout):
 
     def redraw(self):
         self.clear_widgets()
-        data = self.data_helper.data
-        for row_index, row_value in enumerate(data):
+        self.draw_cells()
+
+    def draw_cells(self):
+        for row_index, row_value in enumerate(self.data_helper.data):
             for col_index, cell_value in enumerate(row_value):
                 cell = EditableCell(text=cell_value, row_index=row_index, col_index=col_index, size=CELL_SIZE,
-                                    data_helper=self.data_helper)
+                                    data_helper=self.data_helper, readonly=self.read_only_mode)
                 self.add_widget(cell)
 
     def sort_by_column(self, index, reverse=False):
         self.data_helper.sort_by_column(index, reverse=reverse)
+        self.redraw()
+
+    def toggle_mode(self):
+        self.read_only_mode = not self.read_only_mode
         self.redraw()

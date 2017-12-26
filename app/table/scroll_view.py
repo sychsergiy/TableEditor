@@ -57,7 +57,7 @@ class TableView(GridLayout):
         }
         content_view = TableContentView(**options)
 
-        self.add_widget(ToggleModeButton(size=(HEADER_SIZE, HEADER_SIZE)))
+        self.add_widget(ToggleModeButton(size=(HEADER_SIZE, HEADER_SIZE), table=content_view))
 
         self.add_widget(TopHeaderView(length=cols_n, height=HEADER_SIZE, table=content_view))
 

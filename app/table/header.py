@@ -19,7 +19,10 @@ Builder.load_string("""
 
 
 class ToggleModeButton(ToggleButton):
-    pass
+    table = ObjectProperty(None)
+
+    def on_press(self):
+        self.table.toggle_mode()
 
 
 class TopHeaderButton(Button):
@@ -42,6 +45,7 @@ class TopHeaderButton(Button):
     def second_select(self):
         self.selected = False
         self.selected_twice = True
+        self.background_color = [.3, .9, .3, 1.0]
 
     def select(self):
         self.parent.set_selected_cell(self)
