@@ -3,7 +3,8 @@ from kivy.base import Builder
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 
-from table import TableViewSingleton, TableScrollView
+from table_view import TableViewSingleton, TableScrollView
+
 
 Builder.load_string("""
 <EditableCell>:
