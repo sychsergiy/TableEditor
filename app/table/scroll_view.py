@@ -4,17 +4,18 @@ from kivy.uix.scrollview import ScrollView
 from kivy.uix.gridlayout import GridLayout
 from kivy.properties import ObjectProperty
 
-from settings import CELL_SIZE
+from settings import CELL_SIZE, HEADER_SIZE
 
-from .table_content import TableContentView
+from .content_view import TableContentView
+
+from .header import ToggleModeButton, TopHeader, LeftHeader
 
 Builder.load_string("""
 <TableView>:
-    cols: 1
-    rows: 1
+    cols: 2
+    rows: 2
     size_hint_x: None
     size_hint_y: None
-    # todo: add headers and align button
 """)
 
 
@@ -32,7 +33,7 @@ class TableScrollView(ScrollView):
     def get_table_content_size(self):
         cols_n = self.data_helper.get_cols_n()
         rows_n = self.data_helper.get_rows_n()
-        return cols_n * CELL_SIZE[0], rows_n*CELL_SIZE[1]
+        return cols_n * CELL_SIZE[0] + HEADER_SIZE, rows_n * CELL_SIZE[1] + HEADER_SIZE
 
 
 class TableView(GridLayout):
@@ -53,6 +54,10 @@ class TableView(GridLayout):
             'rows': self.data_helper.get_rows_n(),
         }
         table_content = TableContentView(**options)
+        self.add_widget(ToggleModeButton())
+
+        self.add_widget(TopHeader())
+
+        self.add_widget(LeftHeader())
+
         self.add_widget(table_content)
-
-

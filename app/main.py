@@ -1,7 +1,7 @@
 from kivy.app import App
 from kivy.uix.label import Label
 
-from table.table_scroll_view import TableScrollView
+from table.scroll_view import TableScrollView
 from helper import MatrixHelper
 
 
