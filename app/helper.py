@@ -1,5 +1,6 @@
-class MatrixHelper(object):
-    def __init__(self, data):
+class DataHelper(object):
+    def __init__(self, string_data):
+        data = self.parse_data(string_data)
         self.data = self.normalize_initial_data(data)
 
     @staticmethod
@@ -27,4 +28,8 @@ class MatrixHelper(object):
 
     def sort_by_column(self, index, reverse=False):
         self.data.sort(key=lambda x: x[index], reverse=reverse)
+
+    @staticmethod
+    def parse_data(string_data):
+        return [row.split('\t') for row in string_data.split('\n')]
 

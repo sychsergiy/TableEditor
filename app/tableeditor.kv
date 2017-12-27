@@ -1,0 +1,11 @@
+#: import FileBrowserPanel file_browser.file_browser.FileBrowserPanel
+#: import TableScrollView table.scroll_view.TableScrollView
+
+BoxLayout:
+    orientation: 'vertical'
+    FileBrowserPanel:
+        id: file_browser
+        scroll_view: scroll_view
+
+    TableScrollView:
+        id: scroll_view

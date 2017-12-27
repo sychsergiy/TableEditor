@@ -2,6 +2,7 @@ from kivy.properties import ObjectProperty
 
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.gridlayout import GridLayout
+from kivy.uix.label import Label
 
 from settings import CELL_SIZE, HEADER_SIZE
 
@@ -10,12 +11,23 @@ from .header import ToggleModeButton, TopHeaderView, LeftHeaderView
 
 
 class TableScrollView(ScrollView):
-    data_helper = ObjectProperty()
+    data_helper = ObjectProperty(None)
 
     def __init__(self, **kwargs):
         super(TableScrollView, self).__init__(**kwargs)
-        table = TableView(data_helper=self.data_helper, size=self.get_table_content_size())
-        self.add_widget(table)
+        self.redraw()
+
+    def redraw(self):
+        self.clear_widgets()
+        if self.data_helper:
+            table = TableView(data_helper=self.data_helper, size=self.get_table_content_size())
+            self.add_widget(table)
+        else:
+            self.add_widget(Label(text='Please load file'))
+
+    def set_data_helper(self, data_helper):
+        self.data_helper = data_helper
+        self.redraw()
 
     def get_table_content_size(self):
         cols_n = self.data_helper.get_cols_n()
@@ -24,7 +36,7 @@ class TableScrollView(ScrollView):
 
 
 class TableView(GridLayout):
-    data_helper = ObjectProperty()
+    data_helper = ObjectProperty(None)
 
     def __init__(self, **kwargs):
         super(TableView, self).__init__(**kwargs)

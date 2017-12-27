@@ -4,13 +4,14 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import ObjectProperty
 from kivy.uix.popup import Popup
 
+from helper import DataHelper
+
 from .dialogs import LoadDialog, SaveDialog
 
 
 class FileBrowserPanel(BoxLayout):
     loadfile = ObjectProperty(None)
     savefile = ObjectProperty(None)
-    text_input = ObjectProperty(None)
 
     def dismiss_popup(self):
         self._popup.dismiss()
@@ -29,12 +30,12 @@ class FileBrowserPanel(BoxLayout):
 
     def load(self, path, filename):
         with open(os.path.join(path, filename[0])) as stream:
-            self.text_input.text = stream.read()
+            data_helper = DataHelper(stream.read())
+            self.scroll_view.set_data_helper(data_helper)
 
         self.dismiss_popup()
 
     def save(self, path, filename):
         with open(os.path.join(path, filename), 'w') as stream:
             stream.write(self.text_input.text)
-
         self.dismiss_popup()
