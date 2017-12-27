@@ -38,6 +38,13 @@ class DataHelper(object):
             n = possible_n - 1
         self.data = self.data[:begin_index] + self.data[begin_index+n:]
 
+    def remove_cols(self, n, begin_index):
+        possible_n = self.get_cols_n()
+        if n > possible_n:
+            n = possible_n - 1
+        for i, row in enumerate(self.data):
+            self.data[i] = row[:begin_index] + row[begin_index+n:]
+
     @staticmethod
     def parse_data(string_data):
         return [row.split('\t') for row in string_data.split('\n')]

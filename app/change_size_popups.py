@@ -38,7 +38,12 @@ class TableSizeManager(FloatLayout):
 
     def show_remove_rows_dialog(self):
         content = ChangeTableSizeDialog(accept=self.remove_rows, cancel=self.dismiss_popup)
-        self._popup = Popup(title='Add cols', content=content, size_hint=(.5, .5))
+        self._popup = Popup(title='Remove rows', content=content, size_hint=(.5, .5))
+        self._popup.open()
+
+    def show_remove_cols_dialog(self):
+        content = ChangeTableSizeDialog(accept=self.remove_cols, cancel=self.dismiss_popup)
+        self._popup = Popup(title='Remove cols', content=content, size_hint=(.5, .5))
         self._popup.open()
 
     def insert_rows(self, str_n, str_begin_index):
@@ -54,6 +59,11 @@ class TableSizeManager(FloatLayout):
     def remove_rows(self, str_n, str_begin_index):
         n, begin_index = self.validate_input(str_n, str_begin_index)
         self.scroll_view.remove_rows(n, begin_index)
+        self._popup.dismiss()
+
+    def remove_cols(self, str_n, str_begin_index):
+        n, begin_index = self.validate_input(str_n, str_begin_index)
+        self.scroll_view.remove_cols(n, begin_index)
         self._popup.dismiss()
 
     @staticmethod
