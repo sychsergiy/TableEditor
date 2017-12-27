@@ -1,24 +1,13 @@
-from kivy.app import App
-from kivy.uix.floatlayout import FloatLayout
-from kivy.factory import Factory
+import os
+
+from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import ObjectProperty
 from kivy.uix.popup import Popup
 
-import os
+from .dialogs import LoadDialog, SaveDialog
 
 
-class LoadDialog(FloatLayout):
-    load = ObjectProperty(None)
-    cancel = ObjectProperty(None)
-
-
-class SaveDialog(FloatLayout):
-    save = ObjectProperty(None)
-    text_input = ObjectProperty(None)
-    cancel = ObjectProperty(None)
-
-
-class Root(FloatLayout):
+class FileBrowserPanel(BoxLayout):
     loadfile = ObjectProperty(None)
     savefile = ObjectProperty(None)
     text_input = ObjectProperty(None)
@@ -49,15 +38,3 @@ class Root(FloatLayout):
             stream.write(self.text_input.text)
 
         self.dismiss_popup()
-
-
-class Editor(App):
-    pass
-
-
-Factory.register('Root', cls=Root)
-Factory.register('LoadDialog', cls=LoadDialog)
-Factory.register('SaveDialog', cls=SaveDialog)
-
-if __name__ == '__main__':
-    Editor().run()
