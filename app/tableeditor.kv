@@ -1,12 +1,8 @@
-#: import FileBrowser file_browser.file_browser.FileBrowser
-#: import TableScrollView table.scroll_view.TableScrollView
-#: import ActionBar kivy.uix.actionbar
-
 BoxLayout:
     orientation: 'vertical'
     ActionBar:
         id: action_bar
-        file_browser: FileBrowser()
+        file_browser: file_browser
 
         pos_hint: {'top':1}
         ActionView:
