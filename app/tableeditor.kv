@@ -1,11 +1,42 @@
-#: import FileBrowserPanel file_browser.file_browser.FileBrowserPanel
+#: import FileBrowser file_browser.file_browser.FileBrowser
 #: import TableScrollView table.scroll_view.TableScrollView
+#: import ActionBar kivy.uix.actionbar
 
 BoxLayout:
     orientation: 'vertical'
-    FileBrowserPanel:
-        id: file_browser
-        scroll_view: scroll_view
+    ActionBar:
+        id: action_bar
+        file_browser: FileBrowser()
+
+        pos_hint: {'top':1}
+        ActionView:
+            use_separator: True
+            ActionPrevious:
+                title: 'Table editor'
+                with_previous: False
+            ActionButton:
+                text: 'Load'
+                on_release: file_browser.show_load()
+            ActionButton:
+                text: 'Save'
+                on_release: file_browser.show_save()
+            ActionGroup:
+                dropdown_width: 200
+                text: 'Change table size'
+                ActionButton:
+                    text: 'Add rows'
+                ActionButton:
+                    text: 'Add columns'
+                ActionButton:
+                    text: 'Remove Rows'
+                ActionButton:
+                    text: 'Remove Rows'
 
     TableScrollView:
         id: scroll_view
+
+    FileBrowser:
+        id: file_browser
+        scroll_view: scroll_view
+        size_hint: (None, None)
+        size: (0, 0)

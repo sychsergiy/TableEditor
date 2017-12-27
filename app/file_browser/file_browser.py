@@ -1,7 +1,8 @@
 import os
 
-from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import ObjectProperty
+
+from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.popup import Popup
 
 from helper import DataHelper
@@ -9,7 +10,7 @@ from helper import DataHelper
 from .dialogs import LoadDialog, SaveDialog
 
 
-class FileBrowserPanel(BoxLayout):
+class FileBrowser(FloatLayout):
     loadfile = ObjectProperty(None)
     savefile = ObjectProperty(None)
 
