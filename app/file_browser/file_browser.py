@@ -9,7 +9,7 @@ from helper import DataHelper
 from .dialogs import LoadDialog, SaveDialog
 
 
-class FileBrowser(FloatLayout):
+class FileBrowserManager(FloatLayout):
     def dismiss_popup(self):
         self._popup.dismiss()
 

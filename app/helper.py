@@ -11,11 +11,14 @@ class DataHelper(object):
                 row.append('')
         return data
 
-    def insert_empty_rows(self, n, begin_index=None):
-        pass
+    def insert_empty_rows(self, n, begin_index):
+        for i in range(n):
+            self.data.insert(begin_index, ['']*self.get_cols_n())
 
-    def insert_empty_cols(self, n, begin_index=None):
-        pass
+    def insert_empty_cols(self, n, begin_index):
+        for row in self.data:
+            for i in range(n):
+                row.insert(begin_index, '')
 
     def update_cell(self, value, row_index, col_index):
         self.data[row_index][col_index] = value

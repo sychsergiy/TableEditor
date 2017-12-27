@@ -21,18 +21,52 @@ BoxLayout:
                 text: 'Change table size'
                 ActionButton:
                     text: 'Add rows'
+                    on_release: table_size_manager.show_add_rows_dialog()
                 ActionButton:
                     text: 'Add columns'
+                    on_release: table_size_manager.show_add_cols_dialog()
                 ActionButton:
-                    text: 'Remove Rows'
+                    text: 'Remove rows'
                 ActionButton:
-                    text: 'Remove Rows'
+                    text: 'Remove cols'
 
     TableScrollView:
         id: scroll_view
 
-    FileBrowser:
+    FileBrowserManager:
         id: file_browser
         scroll_view: scroll_view
         size_hint: (None, None)
         size: (0, 0)
+
+    TableSizeManager:
+        id: table_size_manager
+        scroll_view: scroll_view
+        size_hint: (None, None)
+        size: (0, 0)
+
+<ChangeTableSizeDialog>:
+    cols: 2
+    rows: 3
+    size: root.size
+    pos: root.pos
+    padding: 10
+
+    Label:
+        text: 'Quantity'
+    IntInput:
+        id: quantity_input
+
+    Label:
+        text: 'Index'
+    IntInput:
+        id: index_input
+
+    Button:
+        id: accept_button
+        text: 'accept'
+        on_release: root.accept(quantity_input.text, index_input.text)
+    Button:
+        id: cancel_button
+        text: 'cancel'
+        on_release: root.cancel()

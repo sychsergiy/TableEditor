@@ -33,6 +33,14 @@ class TableScrollView(ScrollView):
         rows_n = self.data_helper.get_rows_n()
         return cols_n * CELL_SIZE[0] + HEADER_SIZE, rows_n * CELL_SIZE[1] + HEADER_SIZE
 
+    def insert_empty_rows(self, n, begin_index):
+        self.data_helper.insert_empty_rows(n, begin_index)
+        self.redraw()
+
+    def insert_empty_cols(self, n, begin_index):
+        self.data_helper.insert_empty_cols(n, begin_index)
+        self.redraw()
+
 
 class TableView(GridLayout):
     data_helper = ObjectProperty(None)
