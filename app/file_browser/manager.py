@@ -4,7 +4,7 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 
-from helper import DataHelper
+from root.helper import DataHelper
 
 from .dialogs import LoadDialog, SaveDialog
 

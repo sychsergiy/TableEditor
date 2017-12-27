@@ -34,13 +34,13 @@ class DataHelper(object):
 
     def remove_rows(self, n, begin_index):
         possible_n = self.get_rows_n()
-        if n > possible_n:
+        if n >= possible_n:
             n = possible_n - 1
         self.data = self.data[:begin_index] + self.data[begin_index+n:]
 
     def remove_cols(self, n, begin_index):
         possible_n = self.get_cols_n()
-        if n > possible_n:
+        if n >= possible_n:
             n = possible_n - 1
         for i, row in enumerate(self.data):
             self.data[i] = row[:begin_index] + row[begin_index+n:]

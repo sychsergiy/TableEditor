@@ -19,3 +19,30 @@
     rows: 2
     size_hint_x: None
     size_hint_y: None
+
+
+<ChangeTableSizeDialog>:
+    cols: 2
+    rows: 3
+    size: root.size
+    pos: root.pos
+    padding: 10
+
+    Label:
+        text: 'Quantity'
+    IntInput:
+        id: quantity_input
+
+    Label:
+        text: 'Index'
+    IntInput:
+        id: index_input
+
+    Button:
+        id: accept_button
+        text: 'accept'
+        on_release: root.accept(quantity_input.text, index_input.text)
+    Button:
+        id: cancel_button
+        text: 'cancel'
+        on_release: root.cancel()

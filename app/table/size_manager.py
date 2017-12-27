@@ -1,9 +1,10 @@
 import re
 
+from kivy.properties import ObjectProperty
+
 from kivy.uix.popup import Popup
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.gridlayout import GridLayout
-from kivy.properties import ObjectProperty
 from kivy.uix.textinput import TextInput
 
 
@@ -74,4 +75,3 @@ class TableSizeManager(FloatLayout):
             str_begin_index = 0
 
         return int(str_n), int(str_begin_index)
-

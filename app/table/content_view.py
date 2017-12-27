@@ -3,7 +3,7 @@ from kivy.properties import ObjectProperty, NumericProperty, BooleanProperty
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.textinput import TextInput
 
-from settings import CELL_SIZE
+from root.settings import CELL_SIZE
 
 
 class EditableCell(TextInput):
