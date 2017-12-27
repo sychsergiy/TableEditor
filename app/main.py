@@ -8,6 +8,7 @@ from helper import MatrixHelper
 from file_browser.file_browser import FileBrowserPanel
 
 Builder.load_file('file_browser/filebrowser.kv')
+Builder.load_file('table/table.kv')
 
 
 class TableEditorApp(App):

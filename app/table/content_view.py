@@ -1,17 +1,9 @@
-from kivy.base import Builder
+from kivy.properties import ObjectProperty, NumericProperty, BooleanProperty
 
 from kivy.uix.gridlayout import GridLayout
-from kivy.properties import ObjectProperty, NumericProperty, BooleanProperty
 from kivy.uix.textinput import TextInput
-from kivy.uix.label import Label
-from settings import CELL_SIZE
 
-Builder.load_string("""
-<EditableCell>:
-    multiline: True
-    size_hint_x: None
-    size_hint_y: None
-""")
+from settings import CELL_SIZE
 
 
 class EditableCell(TextInput):

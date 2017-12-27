@@ -1,21 +1,8 @@
-from kivy.base import Builder
+from kivy.properties import NumericProperty, ObjectProperty, BooleanProperty
+
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.togglebutton import ToggleButton
 from kivy.uix.button import Button
-from kivy.properties import NumericProperty, ObjectProperty, BooleanProperty
-
-Builder.load_string("""
-<ToggleModeButton>:
-    size_hint_x: None
-    size_hint_y: None
-
-<TopHeaderView>:
-    size_hint_y: None
-
-<LeftHeaderView>:
-    orientation: 'vertical'
-    size_hint_x: None
-""")
 
 
 class ToggleModeButton(ToggleButton):

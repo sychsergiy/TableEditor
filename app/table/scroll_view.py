@@ -1,28 +1,15 @@
-from kivy.base import Builder
+from kivy.properties import ObjectProperty
 
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.gridlayout import GridLayout
-from kivy.properties import ObjectProperty
 
 from settings import CELL_SIZE, HEADER_SIZE
 
 from .content_view import TableContentView
-
 from .header import ToggleModeButton, TopHeaderView, LeftHeaderView
-
-Builder.load_string("""
-<TableView>:
-    cols: 2
-    rows: 2
-    size_hint_x: None
-    size_hint_y: None
-""")
 
 
 class TableScrollView(ScrollView):
-    """
-    view for scrolling table_view
-    """
     data_helper = ObjectProperty()
 
     def __init__(self, **kwargs):
@@ -37,13 +24,6 @@ class TableScrollView(ScrollView):
 
 
 class TableView(GridLayout):
-    """
-    4*4 view which include:
-        1) toggle mode button (write, read)
-        2) top header
-        3) left header
-        4) table content
-    """
     data_helper = ObjectProperty()
 
     def __init__(self, **kwargs):
