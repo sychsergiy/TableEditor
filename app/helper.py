@@ -32,6 +32,12 @@ class DataHelper(object):
     def sort_by_column(self, index, reverse=False):
         self.data.sort(key=lambda x: x[index], reverse=reverse)
 
+    def remove_rows(self, n, begin_index):
+        possible_n = self.get_rows_n()
+        if n > possible_n:
+            n = possible_n - 1
+        self.data = self.data[:begin_index] + self.data[begin_index+n:]
+
     @staticmethod
     def parse_data(string_data):
         return [row.split('\t') for row in string_data.split('\n')]

@@ -41,6 +41,10 @@ class TableScrollView(ScrollView):
         self.data_helper.insert_empty_cols(n, begin_index)
         self.redraw()
 
+    def remove_rows(self, n, begin_index):
+        self.data_helper.remove_rows(n, begin_index)
+        self.redraw()
+
 
 class TableView(GridLayout):
     data_helper = ObjectProperty(None)
