@@ -1,7 +1,5 @@
 import os
 
-from kivy.properties import ObjectProperty
-
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.popup import Popup
 
@@ -11,9 +9,6 @@ from .dialogs import LoadDialog, SaveDialog
 
 
 class FileBrowser(FloatLayout):
-    loadfile = ObjectProperty(None)
-    savefile = ObjectProperty(None)
-
     def dismiss_popup(self):
         self._popup.dismiss()
 
@@ -33,10 +28,13 @@ class FileBrowser(FloatLayout):
         with open(os.path.join(path, filename[0])) as stream:
             data_helper = DataHelper(stream.read())
             self.scroll_view.set_data_helper(data_helper)
-
         self.dismiss_popup()
 
     def save(self, path, filename):
         with open(os.path.join(path, filename), 'w') as stream:
-            stream.write(self.text_input.text)
+            for row in self.scroll_view.data_helper.data:
+                for cell in row:
+                    stream.write('{}\t'.format(cell))
+                stream.write('\n')
+            stream.write('\n')
         self.dismiss_popup()

@@ -2,8 +2,8 @@ from kivy.properties import ObjectProperty
 
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.gridlayout import GridLayout
-from kivy.uix.label import Label
 
+from helper import DataHelper
 from settings import CELL_SIZE, HEADER_SIZE
 
 from .content_view import TableContentView
@@ -19,11 +19,10 @@ class TableScrollView(ScrollView):
 
     def redraw(self):
         self.clear_widgets()
-        if self.data_helper:
-            table = TableView(data_helper=self.data_helper, size=self.get_table_content_size())
-            self.add_widget(table)
-        else:
-            self.add_widget(Label(text='Please load file'))
+        if not self.data_helper:
+            self.data_helper = DataHelper(string_data='\t\t\t\n\t\t\t\n')
+        table = TableView(data_helper=self.data_helper, size=self.get_table_content_size())
+        self.add_widget(table)
 
     def set_data_helper(self, data_helper):
         self.data_helper = data_helper
